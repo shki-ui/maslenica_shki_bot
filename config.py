@@ -1,4 +1,7 @@
 
+import os
+
+TOKEN = os.environ.get('TOKEN')
 
 GAME_1_URL = "https://shki-ui.github.io/maslenica/shooter.html"
 GAME_2_URL = "https://shki-ui.github.io/maslenica/tower.html"

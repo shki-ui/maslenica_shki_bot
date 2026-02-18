@@ -195,6 +195,25 @@ async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
         f"👥 Всего в базе: {total}"
     )
 
+async def users(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """Показать количество пользователей в базе"""
+    
+    YOUR_USER_ID = 1453183670  # Твой ID
+    
+    # Проверка, что команду вызываешь ты
+    if update.effective_user.id != YOUR_USER_ID:
+        await update.message.reply_text("⛔ Эта команда только для админа")
+        return
+    
+    # Подключаемся к базе
+    conn = sqlite3.connect('bot_database.db')
+    c = conn.cursor()
+    c.execute("SELECT COUNT(*) FROM users")
+    count = c.fetchone()[0]
+    conn.close()
+    
+    await update.message.reply_text(f"👥 Всего пользователей в базе: **{count}**", parse_mode='Markdown')
+
 
 def main():
     """Главная функция запуска бота"""
@@ -203,6 +222,7 @@ def main():
     
     # Регистрируем обработчики команд
     application.add_handler(CommandHandler("start", start)) 
+    application.add_handler(CommandHandler("users", users))
     application.add_handler(CommandHandler("broadcast", broadcast))
     
     # Настраиваем расписание для 2025 года

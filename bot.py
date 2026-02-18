@@ -138,7 +138,7 @@ def main():
         send_game_1,
         DateTrigger(run_date=datetime(current_year, 2, 18, 3, 0)),
         args=[application],
-        id='game1_18feb'
+        id='game1_18feb',
 
         misfire_grace_time=3600,  # ждать выполнения до часа после пропуска
         replace_existing=True  

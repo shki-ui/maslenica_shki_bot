@@ -136,7 +136,7 @@ def main():
     # Отправка 18 февраля в 9:00
     scheduler.add_job(
         send_game_1,
-        DateTrigger(run_date=datetime(current_year, 2, 18, 3, 0)),
+        DateTrigger(run_date=datetime(current_year, 2, 18, 5, 0)),
         args=[application],
         id='game1_18feb',
 

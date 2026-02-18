@@ -1,4 +1,6 @@
 ﻿import logging
+import sqlite3
+import asyncio  # если нет
 import os
 from datetime import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
@@ -124,7 +126,74 @@ async def send_game_2(context: ContextTypes.DEFAULT_TYPE):
                 logger.error(f"Не удалось отправить сообщение {chat_id}: {e}")
 
 
+async def broadcast(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    """📢 ОТПРАВИТЬ СООБЩЕНИЕ ВСЕМ ПОЛЬЗОВАТЕЛЯМ ИЗ БАЗЫ ДАННЫХ"""
+    
+    # Твой USER ID (админ)
+    YOUR_USER_ID = 1453183670
+    
+    # Проверка прав
+    if update.effective_user.id != YOUR_USER_ID:
+        await update.message.reply_text("⛔ Эта команда только для админа")
+        return
+    
+    await update.message.reply_text("⏳ Загружаю список пользователей из базы данных...")
+    
+    # Подключаемся к базе данных
+    conn = sqlite3.connect('bot_database.db')
+    c = conn.cursor()
+    c.execute("SELECT user_id FROM users")
+    db_users = c.fetchall()
+    conn.close()
+    
+    # Превращаем в список ID
+    user_ids = [row[0] for row in db_users]
+    total = len(user_ids)
+    
+    if total == 0:
+        await update.message.reply_text("❌ В базе нет пользователей! Попроси кого-нибудь написать /start")
+        return
+    
+    await update.message.reply_text(f"👥 Найдено пользователей: {total}. Начинаю рассылку...")
+    
+    # Текст сообщения (как в send_game_1)
+    text = """
+ ✨*Среда — «Лакомка»*
 
+Среда считалась самым вкусным днём Масленицы. Хозяйки накрывали богатые столы с блинами, мёдом, вареньем и сметаной. По традиции тёщи приглашали зятьёв в гости и угощали их самыми лучшими блюдами, показывая своё гостеприимство и добрые отношения.
+    """
+    
+    keyboard = [
+        [InlineKeyboardButton("🌟 Играть в игру", web_app=WebAppInfo(url=GAME_2_URL))],
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    # Отправляем
+    sent = 0
+    failed = 0
+    
+    for chat_id in user_ids:
+        try:
+            await context.bot.send_message(
+                chat_id=chat_id,
+                text=text,
+                parse_mode='Markdown',
+                reply_markup=reply_markup
+            )
+            sent += 1
+            # Маленькая пауза, чтобы не забанили
+            await asyncio.sleep(0.05)
+        except Exception as e:
+            failed += 1
+            logger.error(f"Не удалось отправить {chat_id}: {e}")
+    
+    # Отчёт
+    await update.message.reply_text(
+        f"✅ Рассылка завершена!\n"
+        f"📨 Отправлено: {sent}\n"
+        f"❌ Ошибок: {failed}\n"
+        f"👥 Всего в базе: {total}"
+    )
 
 
 def main():
@@ -134,6 +203,8 @@ def main():
     
     # Регистрируем обработчики команд
     application.add_handler(CommandHandler("start", start)) 
+    application.add_handler(CommandHandler("sendnow", send_now))
+    application.add_handler(CommandHandler("broadcast", broadcast))
     
     # Настраиваем расписание для 2025 года
     current_year = datetime.now().year

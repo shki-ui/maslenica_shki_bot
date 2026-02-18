@@ -203,7 +203,6 @@ def main():
     
     # Регистрируем обработчики команд
     application.add_handler(CommandHandler("start", start)) 
-    application.add_handler(CommandHandler("sendnow", send_now))
     application.add_handler(CommandHandler("broadcast", broadcast))
     
     # Настраиваем расписание для 2025 года

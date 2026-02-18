@@ -1,6 +1,6 @@
 ﻿import logging
 import os
-from datetime import datetime, timedelta
+from datetime import datetime
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup, WebAppInfo
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, ContextTypes, CallbackQueryHandler
 from config import TOKEN, GAME_1_URL, GAME_2_URL, GAME_3_URL, CHANNEL_ID
@@ -141,9 +141,11 @@ def main():
     # Отправка 18 февраля в 9:00
     scheduler.add_job(
         send_game_1,
-        DateTrigger(run_date=datetime.now() + timedelta(minutes=1)),
-        args=[application],
-        id='game1_18feb'
+    DateTrigger(run_date=datetime(current_year, 2, 18, 5, 0)),
+    args=[application],
+    id='game1_18feb',
+    misfire_grace_time=3600,
+    replace_existing=True  
 
     )
     

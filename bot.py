@@ -28,7 +28,7 @@ init_db()
 scheduler = AsyncIOScheduler()
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    """Обработчик команды /start - первое сообщение с игрой"""
+    """Обработчик команды /start - отправляет все игры по очереди"""
     user = update.effective_user
     
     # Сохраняем пользователя в базу
@@ -39,23 +39,53 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
         context.bot_data['user_ids'] = set()
     context.bot_data['user_ids'].add(update.effective_chat.id)
     
-    # Создаем кнопку с миниаппом (игрой)
-    keyboard = [
-    [InlineKeyboardButton("🌟 Играть в игру", web_app=WebAppInfo(url=GAME_1_URL))]
-]
-    reply_markup = InlineKeyboardMarkup(keyboard)
+    # Отправляем приветствие
+    await update.message.reply_text(
+        "🎉 *Добро пожаловать на Масленицу!*\n\nСейчас я покажу тебе все игры...",
+        parse_mode='Markdown'
+    )
     
-    # Текст новости
-    news_text = """
-🎉 *Понедельник — «Встреча»*
-
-В первый день Масленицы начинались приготовления к празднику. Делали соломенное чучело Масленицы, украшали дома и дворы, пекли первые блины. Этот день был спокойным и семейным — люди настраивались на весёлую масленичную неделю и делились угощением с близкими.
-    """
+    # Небольшая пауза, чтобы сообщения не слиплись
+    await asyncio.sleep(1)
+    
+    # Игра 1
+    keyboard1 = [
+        [InlineKeyboardButton("🌟 Играть в игру 1", web_app=WebAppInfo(url=GAME_1_URL))]
+    ]
+    reply_markup1 = InlineKeyboardMarkup(keyboard1)
     
     await update.message.reply_text(
-        news_text,
+        "🎮 *Игра 1 — «Встреча»*\n\nПервый день Масленицы!",
         parse_mode='Markdown',
-        reply_markup=reply_markup
+        reply_markup=reply_markup1
+    )
+    
+    await asyncio.sleep(1)
+    
+    # Игра 2
+    keyboard2 = [
+        [InlineKeyboardButton("🌟 Играть в игру 2", web_app=WebAppInfo(url=GAME_2_URL))]
+    ]
+    reply_markup2 = InlineKeyboardMarkup(keyboard2)
+    
+    await update.message.reply_text(
+        "🎮 *Игра 2 — «Лакомка»*\n\nСамый вкусный день!",
+        parse_mode='Markdown',
+        reply_markup=reply_markup2
+    )
+    
+    await asyncio.sleep(1)
+    
+    # Игра 3
+    keyboard3 = [
+        [InlineKeyboardButton("🌟 Играть в игру 3", web_app=WebAppInfo(url=GAME_3_URL))]
+    ]
+    reply_markup3 = InlineKeyboardMarkup(keyboard3)
+    
+    await update.message.reply_text(
+        "🎮 *Игра 3 — «Тёщины вечерки»*\n\nФинальная игра!",
+        parse_mode='Markdown',
+        reply_markup=reply_markup3
     )
 
 

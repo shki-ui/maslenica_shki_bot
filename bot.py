@@ -78,7 +78,7 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # Игра 3
     keyboard3 = [
-        [InlineKeyboardButton("🌟 Игнрать!", web_app=WebAppInfo(url=GAME_3_URL))]
+        [InlineKeyboardButton("🌟 Играть!", web_app=WebAppInfo(url=GAME_3_URL))]
     ]
     reply_markup3 = InlineKeyboardMarkup(keyboard3)
     

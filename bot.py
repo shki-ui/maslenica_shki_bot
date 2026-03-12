@@ -50,12 +50,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # Игра 1
     keyboard1 = [
-        [InlineKeyboardButton("🌟 Играть в игру 1", web_app=WebAppInfo(url=GAME_1_URL))]
+        [InlineKeyboardButton("🌟 Играть!", web_app=WebAppInfo(url=GAME_1_URL))]
     ]
     reply_markup1 = InlineKeyboardMarkup(keyboard1)
     
     await update.message.reply_text(
-        "🎮 *Игра 1 — «Встреча»*\n\nПервый день Масленицы!",
+        "🎮 *Понедельник - «Встреча»*\n\nПервый день Масленицы!",
         parse_mode='Markdown',
         reply_markup=reply_markup1
     )
@@ -64,12 +64,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # Игра 2
     keyboard2 = [
-        [InlineKeyboardButton("🌟 Играть в игру 2", web_app=WebAppInfo(url=GAME_2_URL))]
+        [InlineKeyboardButton("🌟 Играть!", web_app=WebAppInfo(url=GAME_2_URL))]
     ]
     reply_markup2 = InlineKeyboardMarkup(keyboard2)
     
     await update.message.reply_text(
-        "🎮 *Игра 2 — «Лакомка»*\n\nСамый вкусный день!",
+        "🎮 *Среда - «Лакомка»*\n\nСамый вкусный день!",
         parse_mode='Markdown',
         reply_markup=reply_markup2
     )
@@ -78,12 +78,12 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
     
     # Игра 3
     keyboard3 = [
-        [InlineKeyboardButton("🌟 Играть в игру 3", web_app=WebAppInfo(url=GAME_3_URL))]
+        [InlineKeyboardButton("🌟 Игнрать!", web_app=WebAppInfo(url=GAME_3_URL))]
     ]
     reply_markup3 = InlineKeyboardMarkup(keyboard3)
     
     await update.message.reply_text(
-        "🎮 *Игра 3 — «Тёщины вечерки»*\n\nФинальная игра!",
+        "🎮 *Пятница — «Тёщины вечерки»*\n\nФинальная игра!",
         parse_mode='Markdown',
         reply_markup=reply_markup3
     )
